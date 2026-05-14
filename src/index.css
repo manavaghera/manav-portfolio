@@ -1,0 +1,196 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+  body {
+    overflow-x: hidden;
+    @apply bg-black text-white antialiased;
+  }
+}
+
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+  /* Promote to compositor layer only when needed via will-change or transform */
+  transform: translateZ(0);
+  /* Optimization: Containment */
+  contain: layout style;
+}
+
+@media (max-width: 768px) {
+  .liquid-glass {
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+}
+
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.15) 80%,
+    rgba(255, 255, 255, 0.45) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  /* GPU acceleration for pseudo-element */
+  transform: translateZ(0);
+}
+
+/* Fallbacks for performance or reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .liquid-glass {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .card, .cta, .cta:before {
+    transition: none !important;
+  }
+}
+
+/* Optimization for below-fold sections */
+section {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 500px;
+  contain: layout style paint;
+}
+
+/* Specific optimizations for heavy cards */
+.card { 
+   width: 100%;
+   max-width: 800px; 
+   min-height: 250px; 
+   padding: 1rem; 
+   background: rgba(198, 198, 198, 0.05); 
+   border-radius: 16px; 
+   backdrop-filter: blur(12px); 
+   border-bottom: 3px solid rgba(255, 255, 255, 0.1); 
+   border-left: 2px rgba(255, 255, 255, 0.1) outset; 
+   box-shadow: -20px 30px 40px rgba(0, 0, 0, 0.3); 
+   transform: skewX(2deg) translateZ(0); 
+   transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1); 
+   overflow: hidden; 
+   color: white; 
+   display: flex;
+   flex-direction: column;
+   contain: layout;
+ } 
+ 
+ .card:hover { 
+   min-height: 400px; 
+   transform: skew(0deg) translateY(-10px) translateZ(0); 
+   background: rgba(198, 198, 198, 0.08); 
+   box-shadow: -30px 40px 60px rgba(0, 0, 0, 0.5);
+ } 
+
+ .video-container {
+   will-change: opacity;
+   transform: translateZ(0);
+ }
+
+ .gpu-transform {
+    transform: translateY(17%) translateZ(0);
+  }
+
+  .cta { 
+    position: relative; 
+    margin: auto; 
+    padding: 12px 18px; 
+    transition: all 0.2s ease; 
+    border: none; 
+    background: none; 
+    cursor: pointer; 
+  } 
+  
+  .cta:before { 
+    content: ""; 
+    position: absolute; 
+    top: 0; 
+    left: 0; 
+    display: block; 
+    border-radius: 50px; 
+    background: #b1dae7; 
+    width: 45px; 
+    height: 45px; 
+    transition: all 0.3s ease; 
+  } 
+  
+  .cta span { 
+    position: relative; 
+    font-family: "Ubuntu", sans-serif; 
+    font-size: 18px; 
+    font-weight: 700; 
+    letter-spacing: 0.05em; 
+    color: #234567; 
+  } 
+  
+  .cta:hover:before { 
+    width: 100%; 
+    background: #b1dae7; 
+  } 
+  
+  .cta:active { 
+    transform: scale(0.95); 
+  }
+ 
+ .align { 
+   padding: 1.5rem; 
+   display: flex; 
+   flex-direction: row; 
+   gap: 10px; 
+   align-self: flex-start; 
+ } 
+ 
+ .red { 
+   width: 14px; 
+   height: 14px; 
+   border-radius: 50%; 
+   background-color: #ff605c; 
+   box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2); 
+ } 
+ 
+ .yellow { 
+   width: 14px; 
+   height: 14px; 
+   border-radius: 50%; 
+   background-color: #ffbd44; 
+   box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2); 
+ } 
+ 
+ .green { 
+   width: 14px; 
+   height: 14px; 
+   border-radius: 50%; 
+   background-color: #00ca4e; 
+   box-shadow: -2px 2px 5px rgba(0, 0, 0, 0.2); 
+ } 
+ 
+ .card h1 { 
+   text-align: center; 
+   margin: 0.5rem 0 1.5rem 0; 
+   color: rgb(218, 244, 237); 
+   text-shadow: -5px 5px 10px rgba(0, 0, 0, 0.3); 
+ }
+
